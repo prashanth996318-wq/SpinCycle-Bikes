@@ -2,6 +2,8 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../database')
+// Allowed bike types
+const allowedBikeTypes = ['Road', 'Mountain', 'Electric']
 
 // 1. Get all bikes
 router.get('/', (req, res) => {
@@ -77,6 +79,11 @@ router.post('/', (req, res) => {
       message: 'Bike name and bike type are required'
     })
   }
+    if (!allowedBikeTypes.includes(bike_type)) {
+    return res.status(400).json({
+      message: 'Invalid bike type. Allowed types are: Road, Mountain, Electric'
+    })
+  }
 
   const status = availability || 'Available'
 
@@ -104,6 +111,11 @@ router.put('/:id', (req, res) => {
   if (!bike_name || !bike_type || !availability) {
     return res.status(400).json({
       message: 'Bike name, bike type and availability are required'
+    })
+  }
+    if (!allowedBikeTypes.includes(bike_type)) {
+    return res.status(400).json({
+      message: 'Invalid bike type. Allowed types are: Road, Mountain, Electric'
     })
   }
 
